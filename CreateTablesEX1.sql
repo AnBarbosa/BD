@@ -1,55 +1,66 @@
-CREATE DATABASE IF NOT EXISTS ANDRE;
-use andre;
-Create TABLE if not exists Curso (
-		numCurso integer PRIMARY KEY auto_increment,
-		nome varchar(128),
-		totalCreditos smallint
-);
+-- Criacao das tabelas:
 
+CREATE TABLE CURSO(
+       NumCurso INTEGER NOT NULL,
+       Nome CHAR(30) NOT NULL,
+       TotalCreditos INTEGER NOT NULL,
+       CONSTRAINT CHAVECURSO 
+         PRIMARY KEY (NumCurso)
+)ENGINE=INNODB;
 
-CREATE TABLE if not exists Aluno ( 
-		numAluno integer auto_increment,
-		nome varchar(128),		
-		endereco longtext,
-		cidade varchar(85),
-		telefone varchar(13),
-		numCurso integer,
-		PRIMARY KEY(numAluno),
-		FOREIGN KEY(numCurso) REFERENCES Curso(numCurso) ON DELETE SET NULL
-);
+CREATE TABLE ALUNO(
+       NumAluno INTEGER NOT NULL,
+       Nome CHAR(70) NOT NULL,
+       Endereco CHAR(70) NOT NULL,
+       Cidade CHAR(25) NOT NULL,
+       Telefone CHAR(25),
+       NumCurso INTEGER NOT NULL,
+       CONSTRAINT CHAVEALUNO
+         PRIMARY KEY (NumAluno),
+       CONSTRAINT ESTRANGEIRACURSO
+         FOREIGN KEY (NumCurso) REFERENCES CURSO (NumCurso)
+) ENGINE=INNODB;
 
-CREATE TABLE if not exists Disciplina (
-		numDisc integer PRIMARY KEY AUTO_INCREMENT,
-		nome varchar(128),
-		quantCreditos int
-);
+CREATE TABLE DISCIPLINA(
+       NumDisp INTEGER NOT NULL,
+       Nome CHAR(30) NOT NULL,
+       QuantCreditos INTEGER NOT NULL,
+       CONSTRAINT CHAVEDISCIPLINA
+         PRIMARY KEY (NumDisp)
+)ENGINE=INNODB;
 
-CREATE TABLE if not exists Professor(
-		numFunc integer auto_increment,
-		nome varchar(128),
-		admissao date,
-		areaPesquisa varchar(256),
-		PRIMARY KEY (numFunc)
-);
-CREATE TABLE if not exists Aula (
-		numAluno integer,
-		numDisc integer,
-		numFunc integer,
-		semestre varchar(64),
-		nota integer,
-		
-		FOREIGN KEY(numAluno) 	REFERENCES Aluno(numAluno) 		ON DELETE CASCADE,
-		FOREIGN KEY(numDisc) 	REFERENCES Disciplina(numDisc) 	ON DELETE CASCADE,
-		FOREIGN KEY(numFunc) 	REFERENCES Professor(numFunc) 	ON DELETE CASCADE,
+CREATE TABLE PROFESSOR(
+       NumFunc INTEGER NOT NULL,
+       Nome CHAR(70) NOT NULL,
+       Admissao DATE NOT NULL,
+       AreaPesquisa CHAR(30),
+       CONSTRAINT CHAVEPROFESSOR
+         PRIMARY KEY (NumFunc)
+)ENGINE=INNODB;
 
-		PRIMARY KEY(numAluno, numDisc, numFunc)
-);
+CREATE TABLE AULA(
+       NumAluno INTEGER NOT NULL,
+       NumDisp INTEGER NOT NULL,
+       NumFunc INTEGER NOT NULL,
+       Semestre CHAR(10) NOT NULL,
+       Nota DECIMAL(5,2) NOT NULL,
+       CONSTRAINT CHAVEAULA
+         PRIMARY KEY (NumAluno, NumDisp, NumFunc, Semestre),
+       CONSTRAINT ESTRANGEIRAALUNO
+         FOREIGN KEY (NumAluno) REFERENCES ALUNO(NumAluno),
+       CONSTRAINT ESTRANGEIRADISCIPLINA
+         FOREIGN KEY (NumDisp) REFERENCES DISCIPLINA(NumDisp),
+       CONSTRAINT ESTRANGEIRAPROFESSOR
+         FOREIGN KEY (NumFunc) REFERENCES PROFESSOR (NumFunc)
+)ENGINE=INNODB;
 
-CREATE TABLE if not exists DisciplinaCurso (
-		numDisc integer,
-		numCurso integer,
-		PRIMARY KEY(numDisc, numCurso),
-		FOREIGN KEY (numDisc) REFERENCES Disciplina(numDisc) ON DELETE CASCADE,
-		FOREIGN KEY (numCurso) REFERENCES Curso(numCurso) ON DELETE CASCADE
-);
-			
+CREATE TABLE DISCIPLINACURSO(
+       NumDisp INTEGER NOT NULL,
+       NumCurso INTEGER NOT NULL,
+       CONSTRAINT CHAVEDISPCURSO
+         PRIMARY KEY (NumDisp, NumCurso),
+       CONSTRAINT ESTRANGEIRADISP
+         FOREIGN KEY (NumDisp) REFERENCES DISCIPLINA (NumDisp),
+       CONSTRAINT ESTRANGEIRACURSO_B
+         FOREIGN KEY (NumCurso) REFERENCES CURSO (NumCurso)
+)ENGINE=INNODB;

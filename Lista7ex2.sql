@@ -1,3 +1,4 @@
+use ANDRE;
 -- 2a:
 SELECT DISTINCT nome FROM CURSO;
 
@@ -67,27 +68,66 @@ SELECT aluno.nome, aula.nota FROM aluno, aula, disciplina WHERE disciplina.nome 
 -- 2n) Quais os nomes de alunos que cursaram o 1º semestre de 1998 em ordem alfabética, em
 -- 		cada disciplina oferecida nesse semestre (listar também os nomes das disciplinas e os
 -- 		nomes dos professores que ministraram cada disciplina).
-
+SELECT aluno.nome as "Aluno", disciplina.nome as "Disciplina", professor.nome as "Professor"
+	FROM aluno, disciplina, professor, aula
+		WHERE aula.semestre = "11998" and
+				disciplina.numDisp = aula.numdisp and aluno.numaluno = aula.numaluno and professor.numfunc = aula.numfunc
+		ORDER BY disciplina.nome, aluno.nome;
 
 -- 2o) Quais nomes de alunos, nomes de disciplinas e notas do 1º semestre de 1998 no curso
 -- 		de Ciência da Computação.
+SELECT aluno.nome as "Aluno", disciplina.nome as "Disciplina", aula.nota as "Nota"
+	FROM aluno, disciplina, aula, disciplinacurso, curso
+		WHERE aula.semestre = "11998" and curso.Nome="Ciência da Computação" and
+				curso.NumCurso = disciplinacurso.numcurso and disciplina.numDisp = disciplinacurso.numDISP and -- Define a disciplina igual ao curso
+				disciplina.numdisp = aula.numdisp and aluno.numaluno = aula.numaluno 
+		ORDER BY disciplina.nome, aluno.nome;
 
 
 -- 2p) Qual a média de notas do professor Marcos Salvador.
-
+SELECT AVG(aula.nota) 
+		FROM aula, professor
+		WHERE
+			aula.numfunc = professor.numfunc;
 
 -- 2q) Quais os alunos que tiveram nota entre 5.0 e 7.0 em ordem alfabetica de disciplina.
 -- 		Deve retornar o nome do aluno, o nome da disciplina e nota referente a disciplina.
-
+SELECT aluno.nome as "Nome", disciplina.nome as "Disciplina", aula.nota as "Nota"
+	FROM aluno, disciplina, aula
+		WHERE
+			aula.nota BETWEEN 5.0 AND 7.0
+			and aluno.numAluno = aula.numAluno and disciplina.numDisp = aula.numDisp
+		ORDER BY disciplina.nome, aula.nota; -- ORDER BY "Disciplina", "Nota" não funciona.
 
 -- 2r) Quantos alunos o professor Abgair teve no 1º semestre de 1998.
+SELECT Count(distinct aluno.numAluno)
+		FROM aula, professor, aluno
+		WHERE
+			professor.nome like "Abgair%" and aula.semestre = "11998" and
+			aula.numfunc = professor.numfunc and
+			aluno.numAluno = aula.numAluno;
 
 
 -- 2s) Qual a média de notas e a quantidade de disciplinas cursadas pelo aluno Edvaldo Carlos
 -- 		Silva.
+SELECT AVG(aula.nota), Count(distinct disciplina.numDisp) -- cursou duas vezes a mesma disciplina
+		FROM aula, disciplina, aluno
+		WHERE
+			aluno.nome like "Edvaldo Carlos Silva" and
+			aula.numAluno = aluno.numAluno		and
+			disciplina.numDisp = aula.numDisp;
 
 
 -- 2t) Quais as médias das notas, por nome de disciplina, de todos os cursos do 1º semestre de 1998 em ordem alfabética de disciplina.
+SELECT disciplina.nome, AVG(aula.nota) as "Média"
+		FROM aula, disciplina
+		WHERE aula.semestre = "11998" and 
+			disciplina.numdisp = aula.numdisp
+		GROUP BY disciplina.nome ORDER BY AVG(aula.nota)
+			
+
+			
+
 
 
 -- 2u) Quais as médias das notas, por nome de professor, no 1º semestre de 1998.
