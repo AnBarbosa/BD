@@ -133,12 +133,23 @@ SELECT disciplina.nome, AVG(aula.nota) as "Média"
 -- 2u) Quais as médias das notas, por nome de professor, no 1º semestre de 1998.
 
 
+
 -- 2v) Qual a média das notas , por disciplina, no 1º semestre de 1998 do curso de Ciência da
 -- 		Computação.
+
+
+
 -- 2w) Qual foi a quantidade de créditos concluídos (considerar somente as disciplinas
 -- 		aprovadas) do aluno Edvaldo Carlos Silva.
+
+
+
 -- 2x) Quais os nomes de alunos que já completaram 70 créditos (considerar somente os
 -- 		aprovados na disciplina). Deve retornar os nomes dos alunos e a quantidade de créditos.
+
+
+
 -- 2y) Quais os nomes de alunos que cursaram o 1º semestre de 1998 que pertencem ao curso
 -- 		de Ciência da Computação e possuem nota superior à 8.0. Deve retornar os nomes dos
 -- 		alunos, os nomes da disciplina e os nomes dos professores.
+
